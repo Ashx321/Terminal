@@ -618,7 +618,7 @@ tbody tr.flash-down{animation:flashRed .8s ease}
           <div class="cmd-panel-badge" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44" id="cmdLTStatus">70 STOCKS</div>
         </div>
         <div class="cmd-pnl-big" id="cmdLTValue" style="color:var(--amber)">&#8377;1 Cr</div>
-        <div class="cmd-pnl-sub">Fund Value &bull; Target: Multibagger (5Y)</div>
+        <div class="cmd-pnl-sub" id="cmdLTValueSub">Fund Value &bull; Target: Multibagger (5Y)</div>
         <div class="cmd-target-bar"><div class="cmd-target-fill" id="cmdLTBar" style="width:0%;background:linear-gradient(90deg,#f59e0b,#fbbf24)"><span id="cmdLTBarText">0%</span></div></div>
         <div class="cmd-stats-row">
           <div class="cmd-stat"><div class="cmd-stat-label">MTD Return</div><div class="cmd-stat-val" id="cmdLTMTD">0%</div></div>
@@ -659,7 +659,7 @@ tbody tr.flash-down{animation:flashRed .8s ease}
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
       <input type="text" id="addStockInput" list="universeDatalist" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="flex:1;min-width:240px;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" onkeydown="if(event.key==='Enter')handleAddStockInput()">
-      <button class="btn btn-sm" onclick="handleAddStockInput()">&#43; Add to Holdings</button>
+      <button class="btn btn-sm" onclick="handleAddStockInput()">&#43; Search &amp; Add</button>
     </div>
     <datalist id="universeDatalist"></datalist>
     <div class="search-bar">
@@ -703,8 +703,8 @@ tbody tr.flash-down{animation:flashRed .8s ease}
       <span style="color:var(--muted);font-weight:400;font-size:11px;margin-left:8px">Stocks you're watching, not (yet) holding &mdash; no buy price or P&amp;L here.</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="addWatchlistInput" list="universeDatalist" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="flex:1;min-width:240px;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" onkeydown="if(event.key==='Enter'){smartAddTicker(this.value,'watchlist');this.value='';}">
-      <button class="btn btn-sm" onclick="const i=document.getElementById('addWatchlistInput');smartAddTicker(i.value,'watchlist');i.value='';">&#43; Add to Watchlist</button>
+      <input type="text" id="addWatchlistInput" list="universeDatalist" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="flex:1;min-width:240px;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" onkeydown="if(event.key==='Enter'){handleAddWatchlistInput(this)}">
+      <button class="btn btn-sm" onclick="handleAddWatchlistInput(document.getElementById('addWatchlistInput'))">&#43; Search &amp; Add</button>
     </div>
     <div class="search-bar">
       <input type="text" id="wlSearchInput" placeholder="Search by name, ticker, or sector..." oninput="filterWatchlistTable()">
@@ -1280,6 +1280,25 @@ tbody tr.flash-down{animation:flashRed .8s ease}
 </div>
 
 <!-- Detail Modal -->
+<div class="modal-bg" id="addStockModal">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeAddStockModal()">&times;</button>
+    <h3 style="margin:0 0 14px">&#128269; Search &amp; Add a Stock</h3>
+    <input type="text" id="addModalInput" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..."
+      style="width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:8px;font-size:14px"
+      oninput="searchAddModal(this.value)" onkeydown="if(event.key==='Enter'){searchAddModal(this.value,true);}">
+    <div id="addModalResults" style="margin-top:10px;max-height:220px;overflow-y:auto"></div>
+    <div id="addModalDestination" style="display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Add <b id="addModalPickedName" style="color:var(--text)"></b> to:</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="finalizeAddStock('watchlist')">&#128065; Watchlist only</button>
+        <button class="btn btn-outline" onclick="finalizeAddStock('holdings')">&#128176; Holdings only</button>
+        <button class="btn btn-primary" onclick="finalizeAddStock('both')">&#10133; Both</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="detailModal">
   <div class="modal-box"><button class="modal-close" onclick="closeModal()">&times;</button><div id="detailBody"></div></div>
 </div>
@@ -8469,6 +8488,8 @@ async function loadRankingTab() {
   document.getElementById('rankHold').textContent = hold;
   document.getElementById('rankWeak').textContent = weak;
   
+  window._intelHub.scannerHits = strongBuy + rankData.filter(d=>d.totalScore>=60&&d.totalScore<75).length;
+  
   renderRankTable();
   // Auto-sync ranking intelligence to global store
   syncRankingIntel();
@@ -15259,6 +15280,116 @@ function isAlreadyTracked(tickerRaw) {
 
 // ---- The universal "type a ticker/name, confirm, add" flow ----
 // context: 'portfolio' | 'watchlist' | 'universe' | 'index'
+// ============================================================
+//  UNIFIED ADD-STOCK MODAL — search once, choose Watchlist /
+//  Holdings / Both from a single pane, instead of two separate
+//  add-boxes on two different tabs.
+// ============================================================
+var _addModalTimer = null;
+var _addModalPick = null;
+
+function openAddStockModal() {
+  document.getElementById('addStockModal').classList.add('open');
+  document.getElementById('addModalInput').value = '';
+  document.getElementById('addModalResults').innerHTML = '';
+  document.getElementById('addModalDestination').style.display = 'none';
+  _addModalPick = null;
+  setTimeout(function () { document.getElementById('addModalInput').focus(); }, 50);
+}
+function closeAddStockModal() {
+  document.getElementById('addStockModal').classList.remove('open');
+  if (_addModalTimer) clearTimeout(_addModalTimer);
+}
+
+function searchAddModal(query) {
+  query = (query || '').trim();
+  var resultsEl = document.getElementById('addModalResults');
+  document.getElementById('addModalDestination').style.display = 'none';
+  if (_addModalTimer) clearTimeout(_addModalTimer);
+  if (query.length < 2) { resultsEl.innerHTML = ''; return; }
+
+  // Instant local matches from the 300-stock reference database — no network wait.
+  var q = query.toUpperCase();
+  var local = (typeof MOVER_UNIVERSE !== 'undefined' ? MOVER_UNIVERSE : [])
+    .filter(function (m) { return m.t.includes(q) || m.n.toUpperCase().includes(q); })
+    .slice(0, 6)
+    .map(function (m) { return { symbol: m.t + '.NS', name: m.n, exchange: 'NSE' }; });
+  renderAddModalResults(local);
+
+  // Then, if you've got a live API configured, merge in a live search a moment
+  // later (debounced) — catches anything not in the local 300-stock list.
+  if (appsScriptUrl) {
+    _addModalTimer = setTimeout(async function () {
+      var live = await liveSearchTicker(query);
+      var merged = local.slice();
+      live.forEach(function (r) {
+        if (!r.symbol) return;
+        if (!merged.find(function (m) { return m.symbol === r.symbol; })) {
+          merged.push({ symbol: r.symbol, name: r.name, exchange: r.exchange });
+        }
+      });
+      renderAddModalResults(merged.slice(0, 8));
+    }, 400);
+  }
+}
+
+function renderAddModalResults(list) {
+  var el = document.getElementById('addModalResults');
+  if (!list.length) { el.innerHTML = '<div style="color:var(--muted);font-size:12px;padding:8px 0">No matches yet — keep typing, or press Enter to search live.</div>'; return; }
+  el.innerHTML = list.map(function (r) {
+    var safeName = String(r.name).replace(/'/g, "\\'");
+    return '<div onclick="selectAddCandidate(\'' + r.symbol + '\',\'' + safeName + '\')" ' +
+      'style="padding:8px 10px;border-radius:6px;cursor:pointer;display:flex;justify-content:space-between;font-size:13px" ' +
+      'onmouseover="this.style.background=\'var(--card2)\'" onmouseout="this.style.background=\'transparent\'">' +
+      '<span>' + r.name + '</span><span style="color:var(--muted)">' + r.symbol + '</span></div>';
+  }).join('');
+}
+
+function selectAddCandidate(symbol, name) {
+  _addModalPick = { symbol: symbol, name: name, ticker: symbol.replace(/\.(NS|BO)$/, '') };
+  document.getElementById('addModalPickedName').textContent = name + ' (' + symbol + ')';
+  document.getElementById('addModalDestination').style.display = 'block';
+}
+
+function finalizeAddStock(destination) {
+  if (!_addModalPick) return;
+  var tk = _addModalPick.ticker.toUpperCase();
+  var name = _addModalPick.name;
+  var yf = _addModalPick.symbol;
+  var status = isAlreadyTracked(tk);
+
+  var addedTo = [];
+  if ((destination === 'watchlist' || destination === 'both')) {
+    if (status.inWatchlist) { addedTo.push('already on Watchlist'); }
+    else { addToWatchlist(tk, name, yf, 'NSE', 'User Added', 60); addedTo.push('Watchlist'); }
+  }
+  if ((destination === 'holdings' || destination === 'both')) {
+    if (status.inPortfolio) { addedTo.push('already in Holdings'); }
+    else {
+      stocks.push({
+        name: name, ticker: tk, scanStatus: 'INTACT', yf: yf, layer: 'Holdings',
+        sector: 'Unknown', cmp: 0, prevClose: 0, change: 0, changePct: 0,
+        mcap: 0, pe: 0, roce: 0, low52: 0, high52: 0, score: 6.0,
+        thesis: 'Manually added', catalyst: '', catalystDate: '',
+        vol: 0, avgVol: 0, loaded: false, buyPrice: 0, qty: 0,
+        _watchlist: false, _addedByUser: true, _addedDate: new Date().toISOString().split('T')[0]
+      });
+      addedTo.push('Holdings');
+    }
+  }
+  if (typeof MOVER_UNIVERSE !== 'undefined' && !MOVER_UNIVERSE.find(function (m) { return m.t === tk; })) {
+    if (typeof addToUniverse === 'function') addToUniverse({ t: tk, n: name, s: 'Unknown', c: 'M', pe: 0, ro: 0, mc: 0 });
+  }
+  if (typeof savePortfolioToStorage === 'function') savePortfolioToStorage();
+  if (typeof fetchAllPrices === 'function') fetchAllPrices();
+  if (typeof filterWatchlistTable === 'function') filterWatchlistTable();
+  if (typeof renderTable === 'function' && typeof getFilteredStocks === 'function') renderTable(getFilteredStocks());
+  if (typeof updateScanCounts === 'function') updateScanCounts();
+
+  closeAddStockModal();
+  alert(name + ' added \u2014 ' + addedTo.join(', ') + '.');
+}
+
 async function smartAddTicker(rawInput, context) {
   if (!rawInput || !rawInput.trim()) return;
   var input = rawInput.trim();
@@ -15367,8 +15498,20 @@ function manualRemoveFromWatchlist(ticker) {
 function handleAddStockInput() {
   var input = document.getElementById('addStockInput');
   if (!input || !input.value.trim()) return;
-  smartAddTicker(input.value, 'portfolio');
+  var typed = input.value.trim();
   input.value = '';
+  openAddStockModal();
+  document.getElementById('addModalInput').value = typed;
+  searchAddModal(typed);
+}
+
+function handleAddWatchlistInput(inputEl) {
+  if (!inputEl || !inputEl.value.trim()) return;
+  var typed = inputEl.value.trim();
+  inputEl.value = '';
+  openAddStockModal();
+  document.getElementById('addModalInput').value = typed;
+  searchAddModal(typed);
 }
 
 // ---- Raw quote fetch (Apps Script if configured, else CORS-proxy fallback) ----
@@ -15796,6 +15939,20 @@ function intelHubSectorStrength(sector) {
 }
 
 // ── COMMAND CENTER REFRESH ──
+function getMonthlyAnchor(key, currentValue) {
+  // Anchors a value at the start of each calendar month so we can compute a
+  // genuine month-to-date % change, rather than showing a hardcoded number.
+  var storageKey = 'monthlyAnchor_' + key;
+  var nowMonth = new Date().toISOString().slice(0, 7); // 'YYYY-MM'
+  var saved = null;
+  try { saved = JSON.parse(localStorage.getItem(storageKey) || 'null'); } catch (e) {}
+  if (!saved || saved.month !== nowMonth) {
+    saved = { month: nowMonth, startValue: currentValue };
+    localStorage.setItem(storageKey, JSON.stringify(saved));
+  }
+  return saved;
+}
+
 function refreshCommandCenter() {
   try {
     // Day Trade Panel — read from localStorage via getDT()
@@ -15911,6 +16068,48 @@ function refreshCommandCenter() {
       var topSec = Object.entries(sectorMap).sort(function(a, b) { return b[1] - a[1]; })[0];
       var secEl = document.getElementById('cmdLTSector');
       if (secEl && topSec) secEl.textContent = topSec[0].substring(0, 10);
+
+      // Real Fund Value: sum of (current price × qty) across everything you
+      // actually hold (qty > 0) — this was a hardcoded "₹1 Cr" placeholder
+      // before; now it reflects what you've actually entered.
+      var ltValue = 0;
+      loaded.forEach(function(s) { if (s.qty > 0) ltValue += (s.cmp || 0) * s.qty; });
+      var ltValueEl = document.getElementById('cmdLTValue');
+      if (ltValueEl) {
+        ltValueEl.textContent = ltValue > 0
+          ? '₹' + ltValue.toLocaleString('en-IN', { maximumFractionDigits: 0 })
+          : '₹0';
+      }
+      var ltSubEl = document.getElementById('cmdLTValueSub');
+      if (ltSubEl) ltSubEl.textContent = ltValue > 0 ? 'Fund Value' : 'Fund Value — add quantity to holdings to track this';
+
+      // Month-to-date return, genuinely computed against a value anchored at
+      // the start of this calendar month (see getMonthlyAnchor above).
+      var ltAnchor = getMonthlyAnchor('longterm', ltValue);
+      var ltMtdPct = ltAnchor.startValue > 0 ? ((ltValue - ltAnchor.startValue) / ltAnchor.startValue * 100) : 0;
+      var ltMtdEl = document.getElementById('cmdFundLT');
+      if (ltMtdEl) { ltMtdEl.textContent = (ltMtdPct >= 0 ? '+' : '') + ltMtdPct.toFixed(1) + '%'; ltMtdEl.style.color = ltMtdPct >= 0 ? 'var(--green)' : 'var(--red)'; }
+
+      // Day Trade MTD — same monthly-anchor approach, applied to the wallet's
+      // total value (cash + open positions) rather than its all-time P&L.
+      if (dtWallet) {
+        var dtTotalNow = (dtWallet.cash || 0);
+        (dtWallet.positions || []).forEach(function(p) { dtTotalNow += (p.currentPrice || p.buyPrice || 0) * (p.qty || 0); });
+        var dtAnchor = getMonthlyAnchor('daytrade', dtTotalNow);
+        var dtMtdPct = dtAnchor.startValue > 0 ? ((dtTotalNow - dtAnchor.startValue) / dtAnchor.startValue * 100) : 0;
+        var dtMtdEl = document.getElementById('cmdFundDT');
+        if (dtMtdEl) { dtMtdEl.textContent = (dtMtdPct >= 0 ? '+' : '') + dtMtdPct.toFixed(1) + '%'; dtMtdEl.style.color = dtMtdPct >= 0 ? 'var(--green)' : 'var(--red)'; }
+
+        // Combined MTD — capital-weighted (blended $ gain over blended $ base),
+        // NOT a naive average of two percentages from very different capital
+        // bases. A simple average would overweight whichever sleeve has less
+        // money in it and misrepresent your actual blended return.
+        var combinedBase = (dtAnchor.startValue || 0) + (ltAnchor.startValue || 0);
+        var combinedGain = (dtTotalNow - (dtAnchor.startValue || 0)) + (ltValue - (ltAnchor.startValue || 0));
+        var combinedPct = combinedBase > 0 ? (combinedGain / combinedBase * 100) : 0;
+        var combinedEl = document.getElementById('cmdFundTotal');
+        if (combinedEl) { combinedEl.textContent = (combinedPct >= 0 ? '+' : '') + combinedPct.toFixed(1) + '%'; combinedEl.style.color = combinedPct >= 0 ? 'var(--green)' : 'var(--red)'; }
+      }
     }
 
     // Intel Hub cards
@@ -15918,10 +16117,26 @@ function refreshCommandCenter() {
     if (regEl) regEl.textContent = window._intelHub.regime || '--';
     var catEl = document.getElementById('cmdCatalysts');
     if (catEl) {
+      // Repurposed: the News-Intel engine that used to feed this (LiveCatalystEngine /
+      // PRIMARY_SIGNALS) was removed along with that tab, so this was permanently
+      // stuck at 0. Now counts stocks within 3% of a 52-week high or low — a real,
+      // always-available signal that something technically notable is happening.
       var catCount = 0;
-      try { catCount = (typeof LiveCatalystEngine !== 'undefined') ? LiveCatalystEngine.getSignals().length : (typeof PRIMARY_SIGNALS !== 'undefined' ? PRIMARY_SIGNALS.length : 0); } catch(e) {}
+      if (typeof stocks !== 'undefined') {
+        stocks.forEach(function(s) {
+          if (!s.cmp || s._watchlist) return;
+          if (s.high52 && s.cmp >= s.high52 * 0.97) catCount++;
+          else if (s.low52 && s.cmp <= s.low52 * 1.03) catCount++;
+        });
+      }
       catEl.textContent = catCount;
       window._intelHub.catalystsActive = catCount;
+    }
+    var scanEl = document.getElementById('cmdScannerHits');
+    if (scanEl) {
+      // Was never wired to anything (always showed 0). Now reflects the Ranking
+      // Engine's Strong-Buy + Buy count from its last run this session.
+      scanEl.textContent = (typeof window._intelHub.scannerHits === 'number') ? window._intelHub.scannerHits : 0;
     }
     var brainEl = document.getElementById('cmdAIBrain');
     if (brainEl) {
