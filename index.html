@@ -80,8 +80,6 @@ td,.stat-val,.score-big .num,.g-val,.sent-val,.tech-gauge-val,.score-metric .val
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.85)}}
 
 /* ── 3D tilt (JS-driven; see tilt engine script) ────────────── */
-.tilt-3d{transform-style:preserve-3d;will-change:transform;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .5s ease}
-.tilt-3d-active{transition:none}
 
 /* ── Tabs ───────────────────────────────────────────────────── */
 .tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto}
@@ -109,7 +107,7 @@ td,.stat-val,.score-big .num,.g-val,.sent-val,.tech-gauge-val,.score-metric .val
   box-shadow:var(--shadow-sm);transition:.18s}
 .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
   background:linear-gradient(90deg,var(--accent),transparent);opacity:.7}
-.stat-card:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);border-color:#33384280}
+.stat-card:hover{box-shadow:var(--shadow-md);border-color:#33384280}
 .stat-label{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.09em;
   margin-bottom:8px;font-weight:600}
 .stat-val{font-size:25px;font-weight:600;letter-spacing:-.02em}
@@ -158,8 +156,8 @@ td{padding:10px 12px;white-space:nowrap;font-size:12.5px}
 .scorer-btn{background:linear-gradient(135deg,var(--accent-bright),var(--accent));color:#171307;
   border:none;padding:14px 28px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;
   cursor:pointer;transition:.18s;white-space:nowrap;letter-spacing:.01em}
-.scorer-btn:hover{filter:brightness(1.08);transform:translateY(-1px);box-shadow:0 6px 18px rgba(201,162,39,.25)}
-.scorer-btn:active{transform:translateY(0)}
+.scorer-btn:hover{filter:brightness(1.08);box-shadow:0 6px 18px rgba(201,162,39,.25)}
+.scorer-btn:active{filter:brightness(0.95)}
 .scorer-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 .score-card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);
   border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden;box-shadow:var(--shadow-md)}
@@ -244,7 +242,7 @@ td{padding:10px 12px;white-space:nowrap;font-size:12.5px}
 .intel-item a:hover{color:var(--accent-bright)!important;text-decoration:underline}
 .news-item-deep .news-source{font-size:11px;color:var(--muted);margin-top:4px}
 .add-watchlist-btn{background:linear-gradient(135deg,#2fbe77,#22a366);color:#fff;border:none;padding:14px 28px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:.18s;width:100%;margin-top:16px;letter-spacing:.02em}
-.add-watchlist-btn:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(47,190,119,.25)}
+.add-watchlist-btn:hover{box-shadow:0 8px 20px rgba(47,190,119,.25)}
 .add-watchlist-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .remove-watchlist-btn{background:var(--card2);color:var(--red);border:1px solid var(--red);padding:14px 28px;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:.18s;width:100%;margin-top:16px}
 .remove-watchlist-btn:hover{background:rgba(239,91,80,.1)}
@@ -277,7 +275,7 @@ td{padding:10px 12px;white-space:nowrap;font-size:12.5px}
 
 /* News */
 .news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:12px;transition:.15s}
-.news-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.news-card:hover{border-color:var(--accent);box-shadow:var(--shadow-sm)}
 .news-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-size:11px;color:var(--muted)}
 .news-title{font-size:13.5px;font-weight:600;margin-bottom:6px;line-height:1.5}
 .news-body{font-size:12px;color:var(--muted);line-height:1.6}
@@ -332,7 +330,7 @@ td{padding:10px 12px;white-space:nowrap;font-size:12.5px}
 /* ── Valuation Tab ──────────────────────────────────────────── */
 .val-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:24px}
 .val-card{background:linear-gradient(180deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:14px;padding:20px;transition:.2s;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
-.val-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.val-card:hover{border-color:var(--accent);box-shadow:var(--shadow-md)}
 .val-card.top-buy{border-left:3px solid var(--green)}
 .val-card.fair{border-left:3px solid var(--amber)}
 .val-card.expensive{border-left:3px solid var(--red)}
@@ -408,7 +406,7 @@ td{padding:10px 12px;white-space:nowrap;font-size:12.5px}
 .news-section-title span{font-size:12px;color:var(--muted);font-weight:400}
 .ind-news-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
 .ind-news-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;transition:.15s;cursor:pointer}
-.ind-news-card:hover{border-color:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.ind-news-card:hover{border-color:var(--accent);box-shadow:var(--shadow-sm)}
 .ind-news-card .ind-title{font-size:13px;font-weight:600;margin-bottom:6px;line-height:1.5}
 .ind-news-card .ind-src{font-size:11px;color:var(--muted)}
 .ind-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;margin-right:6px;margin-bottom:6px}
@@ -658,8 +656,10 @@ tbody tr.flash-down{animation:flashRed .8s ease}
       <span style="color:var(--muted);font-weight:400;font-size:11px;margin-left:8px">Stocks you own &mdash; set a buy price to track profit/loss. Looking to just monitor something? Use the Watchlist tab.</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="addStockInput" list="universeDatalist" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="flex:1;min-width:240px;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" onkeydown="if(event.key==='Enter')handleAddStockInput()">
-      <button class="btn btn-sm" onclick="handleAddStockInput()">&#43; Search &amp; Add</button>
+      <div style="position:relative;flex:1;min-width:240px">
+        <input type="text" id="addStockInput" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" oninput="inlineStockSearch(this,'addStockInline')" onkeydown="if(event.key==='Escape'){this.value='';document.getElementById('addStockInline').innerHTML='';}">
+        <div id="addStockInline"></div>
+      </div>
     </div>
     <datalist id="universeDatalist"></datalist>
     <div class="search-bar">
@@ -703,8 +703,10 @@ tbody tr.flash-down{animation:flashRed .8s ease}
       <span style="color:var(--muted);font-weight:400;font-size:11px;margin-left:8px">Stocks you're watching, not (yet) holding &mdash; no buy price or P&amp;L here.</span>
     </div>
     <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
-      <input type="text" id="addWatchlistInput" list="universeDatalist" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="flex:1;min-width:240px;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" onkeydown="if(event.key==='Enter'){handleAddWatchlistInput(this)}">
-      <button class="btn btn-sm" onclick="handleAddWatchlistInput(document.getElementById('addWatchlistInput'))">&#43; Search &amp; Add</button>
+      <div style="position:relative;flex:1;min-width:240px">
+        <input type="text" id="addWatchlistInput" placeholder="Type a ticker or company name (e.g. RELIANCE, Tata Motors)..." style="width:100%;box-sizing:border-box;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:8px 12px;border-radius:6px;font-size:13px" oninput="inlineStockSearch(this,'addWatchlistInline')" onkeydown="if(event.key==='Escape'){this.value='';document.getElementById('addWatchlistInline').innerHTML='';}">
+        <div id="addWatchlistInline"></div>
+      </div>
     </div>
     <div class="search-bar">
       <input type="text" id="wlSearchInput" placeholder="Search by name, ticker, or sector..." oninput="filterWatchlistTable()">
@@ -1242,6 +1244,9 @@ tbody tr.flash-down{animation:flashRed .8s ease}
       <button onclick="resetDayTrade()" style="padding:10px 18px;background:var(--card2);color:var(--muted);border:1px solid var(--border);border-radius:8px;cursor:pointer;font-size:13px">&#128260; Reset Day Trade</button>
       <span id="dtLastAction" style="color:var(--muted);font-size:12px;margin-left:auto">No trades today</span>
     </div>
+
+    <!-- Candidate Review Panel (manual runs stop here for review + optional AI opinion) -->
+    <div id="dtReviewPanel"></div>
 
     <!-- Current Positions Table -->
     <div class="card" style="margin-bottom:16px">
@@ -13305,7 +13310,7 @@ function renderDTEquityCurve(w) {
 //  Allocation: Conviction-weighted (top pick gets 35%, not equal)
 //  Target: 3-5% daily return on news-powered concentrated portfolio
 // ---------------------------------------------------------------
-async function runDayTradeAI() {
+async function runDayTradeAI(autoExecute) {
   var w = getDT();
 
   if (w.positions.length > 0) {
@@ -13850,15 +13855,151 @@ async function runDayTradeAI() {
       }
     }
 
-    if (allocations.length === 0) {
-      var reason = sizeMultiplier < 1.0 ?
-        'Risk controls reduced position sizes below minimum (₹12,000). This is the system protecting your capital.' :
-        'Insufficient cash for conviction-sized positions.';
-      alert(reason);
+    window._pendingDT = { allocations: allocations, picks: picks, w: w, totalCash: totalCash, sizeMultiplier: sizeMultiplier, riskState: riskState, btn: btn, statusBadge: statusBadge };
+
+    if (!autoExecute) {
+      // Manual run: stop here and let the user review candidates (and
+      // optionally get an AI opinion on each) before anything is simulated.
+      renderDTReviewPanel();
       if (btn) { btn.disabled = false; btn.textContent = '⚡ Run Day Trade AI'; }
       return;
     }
 
+    commitDTTrades();
+    return;
+
+  } catch(err) {
+    console.error('[DT-v6] Error:', err);
+    alert('Day Trade v6 error: ' + (err.message || err));
+  }
+
+  if (btn) {
+    btn.disabled = false;
+    btn.textContent = '⚡ Run Day Trade AI';
+  }
+
+  updateDTDisplay(getDT());
+}
+
+// Executes whatever is currently sitting in window._pendingDT — called either
+// immediately (unattended auto-trigger) or after a manual review/AI-opinion
+// pass (from the Confirm button in the review panel).
+function renderDTReviewPanel() {
+  var ctx = window._pendingDT;
+  var panel = document.getElementById('dtReviewPanel');
+  if (!ctx || !panel) return;
+
+  var rows = ctx.allocations.map(function (a, i) {
+    var p = a.pick;
+    return '<div id="dtCandCard_' + i + '" style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:8px">' +
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">' +
+      '<label style="display:flex;gap:8px;align-items:flex-start;cursor:pointer">' +
+      '<input type="checkbox" id="dtCandCheck_' + i + '" checked style="margin-top:3px">' +
+      '<span><b>' + p.ticker + '</b> <span style="color:var(--muted);font-size:12px">' + p.name + '</span><br>' +
+      '<span style="font-size:11px;color:var(--muted)">Score ' + p.dtScore + '/200' +
+      (a.trendTemplate ? ' · Trend ' + a.trendTemplate.score + '/8' : '') +
+      (a.rewardRisk ? ' · R:R ' + a.rewardRisk.ratio + ':1' : '') +
+      ' · Alloc <span id="dtCandAlloc_' + i + '">' + Math.round(a.allocation / ctx.totalCash * 100) + '%</span></span></span>' +
+      '</label>' +
+      '<button class="btn btn-outline btn-sm" onclick="getAIOpinionForCandidate(' + i + ')" id="dtAIBtn_' + i + '">&#129302; Get AI Opinion</button>' +
+      '</div>' +
+      '<div id="dtAIResult_' + i + '" style="margin-top:8px"></div>' +
+      '</div>';
+  }).join('');
+
+  panel.innerHTML = '<div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:16px">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">' +
+    '<div style="font-weight:700">Review ' + ctx.allocations.length + ' Candidate' + (ctx.allocations.length === 1 ? '' : 's') + ' Before Trading</div>' +
+    '<div style="display:flex;gap:8px">' +
+    '<button class="btn btn-outline btn-sm" onclick="document.getElementById(\'dtReviewPanel\').innerHTML=\'\';window._pendingDT=null;">Cancel</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="confirmDTFromReview()">&#9989; Confirm &amp; Execute</button>' +
+    '</div></div>' + rows + '</div>';
+}
+
+async function getAIOpinionForCandidate(i) {
+  var ctx = window._pendingDT;
+  if (!ctx) return;
+  var a = ctx.allocations[i];
+  var p = a.pick;
+  var resultEl = document.getElementById('dtAIResult_' + i);
+  var btnEl = document.getElementById('dtAIBtn_' + i);
+  if (!resultEl) return;
+
+  if (!appsScriptUrl) {
+    resultEl.innerHTML = '<div style="color:var(--red);font-size:12px">No API configured \u2014 set MY_PRICE_API_URL to use AI opinions.</div>';
+    return;
+  }
+
+  resultEl.innerHTML = '<div style="color:var(--muted);font-size:12px"><span class="spinner"></span> Asking AI...</div>';
+  if (btnEl) btnEl.disabled = true;
+
+  var payload = {
+    ticker: p.ticker, sector: p.sector, price: p.price,
+    dtScore: p.dtScore, momentum: p.momentum,
+    signals: p.signals, hasCatalyst: p.hasCatalyst,
+    trendTemplateScore: a.trendTemplate ? a.trendTemplate.score : null,
+    rewardRisk: a.rewardRisk ? a.rewardRisk.ratio : null,
+    allocPct: Math.round(a.allocation / ctx.totalCash * 100)
+  };
+
+  try {
+    var url = appsScriptUrl + '?mode=ai_review&candidate=' + encodeURIComponent(JSON.stringify(payload));
+    var resp = await fetch(url, { signal: AbortSignal.timeout(20000) });
+    var d = await resp.json();
+    if (!d.success || !d.data) throw new Error(d.error || 'no response');
+
+    var op = d.data; // { verdict, sizeMultiplier, confidence, rationale }
+    var mult = Math.max(0.5, Math.min(1.5, Number(op.sizeMultiplier) || 1));
+    a.aiOpinion = { verdict: op.verdict, sizeMultiplier: mult, confidence: op.confidence, rationale: op.rationale };
+
+    // Apply the AI's size adjustment to this candidate's allocation
+    a.allocation = a.allocation * mult;
+    a.qty = Math.max(0, Math.floor(a.allocation / p.price));
+    var allocEl = document.getElementById('dtCandAlloc_' + i);
+    if (allocEl) allocEl.textContent = Math.round(a.allocation / ctx.totalCash * 100) + '%';
+
+    var color = op.verdict === 'reject' ? 'var(--red)' : (op.verdict === 'reduce' ? 'var(--amber)' : 'var(--green)');
+    resultEl.innerHTML = '<div style="border-left:3px solid ' + color + ';padding-left:10px;font-size:12px">' +
+      '<b style="color:' + color + ';text-transform:uppercase">' + op.verdict + '</b>' +
+      (op.confidence ? ' <span style="color:var(--muted)">(' + op.confidence + '% confidence)</span>' : '') +
+      (mult !== 1 ? ' <span style="color:var(--muted)">\u00b7 size \u00d7' + mult.toFixed(2) + '</span>' : '') +
+      '<br><span style="color:var(--text)">' + (op.rationale || '') + '</span></div>';
+
+    // Auto-uncheck on a reject — the user can still manually re-check if they disagree
+    if (op.verdict === 'reject') {
+      var chk = document.getElementById('dtCandCheck_' + i);
+      if (chk) chk.checked = false;
+    }
+  } catch (e) {
+    resultEl.innerHTML = '<div style="color:var(--red);font-size:12px">AI opinion failed: ' + (e.message || e) + '</div>';
+  }
+  if (btnEl) { btnEl.disabled = false; btnEl.textContent = '\u{1F501} Ask Again'; }
+}
+
+function confirmDTFromReview() {
+  var ctx = window._pendingDT;
+  if (!ctx) return;
+  var kept = [];
+  ctx.allocations.forEach(function (a, i) {
+    var chk = document.getElementById('dtCandCheck_' + i);
+    if (chk && chk.checked) kept.push(a);
+  });
+  ctx.allocations = kept;
+  if (kept.length === 0) {
+    alert('No candidates selected \u2014 nothing to execute.');
+    return;
+  }
+  commitDTTrades();
+}
+
+function commitDTTrades() {
+  var ctx = window._pendingDT;
+  if (!ctx) return;
+  var allocations = ctx.allocations, picks = ctx.picks, w = ctx.w, totalCash = ctx.totalCash,
+      sizeMultiplier = ctx.sizeMultiplier, riskState = ctx.riskState, btn = ctx.btn, statusBadge = ctx.statusBadge;
+  var minPerTrade = 12000;
+
+  try {
     // ══════════════════════════════════════════════════════════
     //  STEP 6: EXECUTE BUY TRADES [v13.4 — Risk-sized positions]
     //  Uses pre-calculated qty from getRiskBasedPositionSize()
@@ -13887,11 +14028,13 @@ async function runDayTradeAI() {
         dtScore: pick.dtScore, momentum: pick.momentum,
         signals: pick.signals, source: pick.source,
         hasCatalyst: pick.hasCatalyst,
-        allocPct: allocPct, buyTime: new Date().toISOString()
+        allocPct: allocPct, buyTime: new Date().toISOString(),
+        aiOpinion: a.aiOpinion || null
       });
 
       var riskInfo = a.riskPct ? ' | Risk ' + a.riskPct + '%' : '';
       var sizeInfo = sizeMultiplier < 1.0 ? ' | Size×' + sizeMultiplier.toFixed(2) : '';
+      var aiInfo = a.aiOpinion ? ' | AI:' + a.aiOpinion.verdict + (a.aiOpinion.sizeMultiplier !== 1 ? ' x' + a.aiOpinion.sizeMultiplier : '') : '';
       var sigStr = pick.signals.length > 0 ? pick.signals.slice(0, 4).join(' + ') : 'CATALYST';
       var predatorInfo = (a.predatorScore && a.predatorScore !== 0) ? ' | P:' + (a.predatorScore > 0 ? '+' : '') + a.predatorScore : '';
       var predatorSigStr = (a.predatorSignals && a.predatorSignals.length > 0) ? ' | ' + a.predatorSignals.slice(0, 2).join('+') : '';
@@ -13900,7 +14043,7 @@ async function runDayTradeAI() {
         qty: qty, price: pick.price, dtScore: pick.dtScore,
         predatorScore: a.predatorScore || 0,
         predatorSignals: a.predatorSignals || [],
-        reason: '🎯 v13.6 Score ' + pick.dtScore + '/200 | ' + sigStr + ' | Chg ' + pick.momentum + '% | Alloc ' + allocPct + '%' + riskInfo + sizeInfo + predatorInfo + predatorSigStr + (a.trendTemplate ? ' | T:' + a.trendTemplate.score + '/8' : '') + (a.rewardRisk ? ' | RR:' + a.rewardRisk.ratio + ':1' : '') + (a.conviction && a.conviction.multiplier > 1.0 ? ' | Conv:' + a.conviction.multiplier + 'x' : '') + ' | SL:-0.8% | ' + pick.source + (pick.hasCatalyst ? ' | CATALYST' : ' | NO-CAT') + ' | ' + _predatorFIIDII.flowRegime,
+        reason: '🎯 v13.6 Score ' + pick.dtScore + '/200 | ' + sigStr + ' | Chg ' + pick.momentum + '% | Alloc ' + allocPct + '%' + riskInfo + sizeInfo + aiInfo + predatorInfo + predatorSigStr + (a.trendTemplate ? ' | T:' + a.trendTemplate.score + '/8' : '') + (a.rewardRisk ? ' | RR:' + a.rewardRisk.ratio + ':1' : '') + (a.conviction && a.conviction.multiplier > 1.0 ? ' | Conv:' + a.conviction.multiplier + 'x' : '') + ' | SL:-0.8% | ' + pick.source + (pick.hasCatalyst ? ' | CATALYST' : ' | NO-CAT') + ' | ' + _predatorFIIDII.flowRegime,
         source: 'daytrade', time: new Date().toISOString()
       });
 
@@ -13912,15 +14055,14 @@ async function runDayTradeAI() {
     w.todayDate = todayStr;
     saveDT(w);
 
-    // Update risk state with trade count
     riskState.tradesExecuted += buyCount;
     saveDTRiskState(riskState);
 
     var lastAction = document.getElementById('dtLastAction');
     if (lastAction) {
       var catInfo = ' | ' + picks.filter(function(p) { return p.hasCatalyst; }).length + '/' + picks.length + ' have catalysts';
-      var riskInfo = sizeMultiplier < 1.0 ? ' | Size×' + sizeMultiplier.toFixed(2) : '';
-      lastAction.innerHTML = '&#128737; v13.4: Bought ' + buyCount + ' @ ' + new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit'}) + ' | ' + topSignals.join(', ') + catInfo + riskInfo;
+      var riskInfo2 = sizeMultiplier < 1.0 ? ' | Size×' + sizeMultiplier.toFixed(2) : '';
+      lastAction.innerHTML = '&#128737; v13.4: Bought ' + buyCount + ' @ ' + new Date().toLocaleTimeString('en-IN', {hour: '2-digit', minute: '2-digit'}) + ' | ' + topSignals.join(', ') + catInfo + riskInfo2;
     }
 
     if (statusBadge) {
@@ -13931,19 +14073,14 @@ async function runDayTradeAI() {
     }
 
     console.log('[DT-v13.4] Bought ' + buyCount + ' stocks. Cash: ' + w.cash.toLocaleString('en-IN'));
-    console.log('[DT-v13.4] Allocation: ' + topSignals.join(', '));
-    console.log('[DT-v13.4] Risk multiplier: ' + sizeMultiplier + ' | Catalyst rate: ' + picks.filter(function(p) { return p.hasCatalyst; }).length + '/' + picks.length);
-
   } catch(err) {
-    console.error('[DT-v6] Error:', err);
-    alert('Day Trade v6 error: ' + (err.message || err));
+    console.error('[DT-v6 commit] Error:', err);
+    alert('Day Trade commit error: ' + (err.message || err));
   }
 
-  if (btn) {
-    btn.disabled = false;
-    btn.textContent = '⚡ Run Day Trade AI';
-  }
-
+  window._pendingDT = null;
+  var reviewPanel = document.getElementById('dtReviewPanel');
+  if (reviewPanel) reviewPanel.innerHTML = '';
   updateDTDisplay(getDT());
 }
 
@@ -14179,7 +14316,7 @@ function checkDayTradeAutoTrigger() {
     saveDTAutoState(autoState);
     console.log('[DT-AUTO] T1 POST-ORB TRIGGER: 9:45 AM — Opening range formed, scanning catalyst stocks...');
     updateDTAutoStatus('T1: Post-ORB scan (opening range settled)...', '#2FBE77');
-    runDayTradeAI();
+    runDayTradeAI(true); // unattended auto-trigger: execute immediately, no manual review
     return;
   }
 
@@ -14190,7 +14327,7 @@ function checkDayTradeAutoTrigger() {
     saveDTAutoState(autoState);
     console.log('[DT-AUTO] T2 MID-MORNING TRIGGER: 10:45 AM — Re-scanning catalyst stocks...');
     updateDTAutoStatus('T2: Mid-morning catalyst re-scan...', '#E0A23B');
-    runDayTradeAI();
+    runDayTradeAI(true); // unattended auto-trigger: execute immediately, no manual review
     return;
   }
 
@@ -15351,11 +15488,92 @@ function selectAddCandidate(symbol, name) {
   document.getElementById('addModalDestination').style.display = 'block';
 }
 
-function finalizeAddStock(destination) {
-  if (!_addModalPick) return;
-  var tk = _addModalPick.ticker.toUpperCase();
-  var name = _addModalPick.name;
-  var yf = _addModalPick.symbol;
+// Shared by both the full modal and the inline dropdown below — one source
+// of truth for what "add this stock" actually does.
+// ============================================================
+//  INLINE add-stock dropdown — lives directly under the Holdings
+//  and Watchlist search boxes. Typing shows a dropdown immediately
+//  (no button click, no separate popup); picking a result reveals
+//  Watchlist/Holdings/Both right there, and confirms quietly in
+//  place — no native browser dialogs anywhere in this flow.
+// ============================================================
+var _inlineSearchTimer = null;
+var _inlinePick = null;
+
+function inlineStockSearch(inputEl, containerId) {
+  var query = (inputEl.value || '').trim();
+  var container = document.getElementById(containerId);
+  if (_inlineSearchTimer) clearTimeout(_inlineSearchTimer);
+  if (query.length < 2) { container.innerHTML = ''; return; }
+
+  var q = query.toUpperCase();
+  var local = (typeof MOVER_UNIVERSE !== 'undefined' ? MOVER_UNIVERSE : [])
+    .filter(function (m) { return m.t.includes(q) || m.n.toUpperCase().includes(q); })
+    .slice(0, 6)
+    .map(function (m) { return { symbol: m.t + '.NS', name: m.n }; });
+  renderInlineResults(container, local, containerId);
+
+  if (appsScriptUrl) {
+    _inlineSearchTimer = setTimeout(async function () {
+      var live = await liveSearchTicker(query);
+      var merged = local.slice();
+      live.forEach(function (r) {
+        if (!r.symbol) return;
+        if (!merged.find(function (m) { return m.symbol === r.symbol; })) merged.push({ symbol: r.symbol, name: r.name });
+      });
+      renderInlineResults(container, merged.slice(0, 8), containerId);
+    }, 400);
+  }
+}
+
+function renderInlineResults(container, list, containerId) {
+  if (!list.length) { container.innerHTML = ''; return; }
+  var rows = list.map(function (r) {
+    var safe = String(r.name).replace(/'/g, "\\'");
+    return '<div onclick="pickInlineStock(\'' + r.symbol + '\',\'' + safe + '\',\'' + containerId + '\')" ' +
+      'style="padding:8px 12px;cursor:pointer;display:flex;justify-content:space-between;font-size:13px" ' +
+      'onmouseover="this.style.background=\'var(--card2)\'" onmouseout="this.style.background=\'transparent\'">' +
+      '<span>' + r.name + '</span><span style="color:var(--muted)">' + r.symbol + '</span></div>';
+  }).join('');
+  container.innerHTML = '<div style="position:absolute;z-index:50;left:0;right:0;top:100%;margin-top:4px;' +
+    'background:var(--card);border:1px solid var(--border);border-radius:8px;max-height:220px;overflow-y:auto;box-shadow:var(--shadow-md)">' +
+    rows + '</div>';
+}
+
+function pickInlineStock(symbol, name, containerId) {
+  _inlinePick = { symbol: symbol, name: name, ticker: symbol.replace(/\.(NS|BO)$/, ''), containerId: containerId };
+  document.getElementById(containerId).innerHTML =
+    '<div style="position:absolute;z-index:50;left:0;right:0;top:100%;margin-top:4px;padding:12px;' +
+    'background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-md)">' +
+    '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Add <b style="color:var(--text)">' + name + '</b> to:</div>' +
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">' +
+    '<button class="btn btn-outline btn-sm" onclick="finalizeInlineAdd(\'watchlist\')">&#128065; Watchlist</button>' +
+    '<button class="btn btn-outline btn-sm" onclick="finalizeInlineAdd(\'holdings\')">&#128176; Holdings</button>' +
+    '<button class="btn btn-primary btn-sm" onclick="finalizeInlineAdd(\'both\')">&#43; Both</button>' +
+    '</div></div>';
+}
+
+function finalizeInlineAdd(destination) {
+  if (!_inlinePick) return;
+  var addedTo = performAddStock(_inlinePick, destination);
+  var container = document.getElementById(_inlinePick.containerId);
+  var inputId = _inlinePick.containerId === 'addStockInline' ? 'addStockInput' : 'addWatchlistInput';
+
+  if (container) {
+    container.innerHTML = '<div style="position:absolute;z-index:50;left:0;right:0;top:100%;margin-top:4px;padding:10px 12px;' +
+      'background:var(--card);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow-md);color:var(--green);font-size:12px;font-weight:600">' +
+      '&#10003; ' + _inlinePick.name + ' added \u2014 ' + addedTo.join(', ') + '</div>';
+    setTimeout(function () { if (container) container.innerHTML = ''; }, 1800);
+  }
+  var inputEl = document.getElementById(inputId);
+  if (inputEl) inputEl.value = '';
+  _inlinePick = null;
+}
+
+function performAddStock(pick, destination) {
+  var tk = pick.ticker.toUpperCase();
+  var name = pick.name;
+  var yf = pick.symbol;
   var status = isAlreadyTracked(tk);
 
   var addedTo = [];
@@ -15385,9 +15603,18 @@ function finalizeAddStock(destination) {
   if (typeof filterWatchlistTable === 'function') filterWatchlistTable();
   if (typeof renderTable === 'function' && typeof getFilteredStocks === 'function') renderTable(getFilteredStocks());
   if (typeof updateScanCounts === 'function') updateScanCounts();
+  return addedTo;
+}
 
-  closeAddStockModal();
-  alert(name + ' added \u2014 ' + addedTo.join(', ') + '.');
+function finalizeAddStock(destination) {
+  if (!_addModalPick) return;
+  var addedTo = performAddStock(_addModalPick, destination);
+  var name = _addModalPick.name;
+
+  // Quiet in-place confirmation instead of a native alert() — no extra click needed.
+  var destBox = document.getElementById('addModalDestination');
+  if (destBox) destBox.innerHTML = '<div style="color:var(--green);font-size:13px;font-weight:600">&#10003; ' + name + ' added \u2014 ' + addedTo.join(', ') + '.</div>';
+  setTimeout(closeAddStockModal, 1400);
 }
 
 async function smartAddTicker(rawInput, context) {
@@ -15837,53 +16064,7 @@ async function runMonteCarloForTicker() {
 }
 
 
-// ── Real 3D tilt physics for "chrome" cards (perspective + dynamic shadow) ──
-// Deliberately excludes data tables and text-heavy panels — tilting a table of
-// numbers you're trying to read is a usability bug, not a delight.
-(function initTilt3D() {
-  try {
-    var SEL = '.stat-card,.score-card,.val-card,.alert-card,.news-card,.sector-card,' +
-      '.tech-gauge-card,.global-card,.sent-card,.ind-news-card,.news-int-card,' +
-      '.top-pick-chip,.gauge-box,.chart-box';
-    var active = null;
-
-    function applyTilt(card, e) {
-      var rect = card.getBoundingClientRect();
-      var px = (e.clientX - rect.left) / rect.width;
-      var py = (e.clientY - rect.top) / rect.height;
-      var rx = (0.5 - py) * 7;
-      var ry = (px - 0.5) * 9;
-      var sx = (px - 0.5) * 22;
-      var sy = (py - 0.5) * 22;
-      card.classList.add('tilt-3d', 'tilt-3d-active');
-      card.style.transform = 'perspective(800px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(6px)';
-      card.style.boxShadow = sx.toFixed(0) + 'px ' + (sy + 14).toFixed(0) + 'px 28px rgba(0,0,0,.35), 0 0 0 1px rgba(201,162,39,.12)';
-    }
-    function resetTilt(card) {
-      card.classList.remove('tilt-3d-active');
-      card.style.transform = '';
-      card.style.boxShadow = '';
-    }
-    document.addEventListener('mousemove', function (e) {
-      var card = e.target.closest ? e.target.closest(SEL) : null;
-      if (card !== active) {
-        if (active) resetTilt(active);
-        active = card;
-        if (card) card.classList.add('tilt-3d');
-      }
-      if (card) applyTilt(card, e);
-    }, { passive: true });
-    document.addEventListener('mouseout', function (e) {
-      var card = e.target.closest ? e.target.closest(SEL) : null;
-      if (card && (!e.relatedTarget || !card.contains(e.relatedTarget))) {
-        resetTilt(card);
-        if (active === card) active = null;
-      }
-    }, { passive: true });
-  } catch (e) {
-    console.warn('3D tilt engine skipped:', e);
-  }
-})();
+// 3D tilt-on-hover engine removed — cards no longer move/rotate on hover.
 </script>
 <script>
 // ═══════════════════════════════════════════════════════════
